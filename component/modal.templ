@@ -1,0 +1,122 @@
+package component
+
+type ModalProp struct{
+  ID       string
+  Get      string
+  Disabled bool
+}
+
+var modalHandle = templ.NewOnceHandle()
+var directoryHandle = templ.NewOnceHandle()
+
+templ Modal(prop ModalProp) {
+  <dialog id={ prop.ID } class="modal modal-bottom sm:modal-middle"></dialog>
+
+  @modalHandle.Once() {
+    <script type="text/javascript">
+      function showModal(e) {
+        document.getElementById(e.dataset.target).showModal()
+      }
+    </script>
+  }
+}
+
+templ ButtonModal(prop ModalProp, class string) {
+  if prop.Disabled {
+    <button class={ "btn btn-disabled", class }>{ children... }</button>
+  } else {
+    <button class={ "btn", class }
+      onclick="showModal(this)"
+      data-target={ prop.ID }
+      hx-get={ prop.Get }
+      hx-trigger="click"
+      hx-target="dialog.modal">
+      { children... }
+    </button>
+  }
+}
+
+templ QuickShare() {
+  <div class="modal-box">
+    <div class="join mb-2">
+      @ButtonModal(ModalProp{Disabled: true}, "join-item") {
+        Quick Share
+      }
+      @ButtonModal(ModalProp{ID: "create", Get: "/modals/session"}, "join-item") {
+        Create Session
+      }
+    </div>
+    <input type="file" class="file-input file-input-bordered w-full max-w-xs" />
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">
+          Share File
+          @IconSubmit()
+        </button>
+      </form>
+    </div>
+  </div>
+}
+
+
+templ CreateSession() {
+  <div class="modal-box">
+    <div class="join mb-2">
+      @ButtonModal(ModalProp{ID: "create", Get: "/modals/share"}, "join-item") {
+        Quick Share
+      }
+      @ButtonModal(ModalProp{Disabled: true}, "join-item") {
+        Create Session
+      }
+    </div>
+
+    <form name="session" class="space-y-2" autocomplete="off">
+      <input autocomplete="false" name="hidden" type="text" style="display:none;">
+      <label class="input input-bordered flex items-center gap-2">
+        Name
+        <input name="name" type="text" class="grow" placeholder="Session Name" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        Password
+        <input name="password" type="password" class="grow" placeholder="******" />
+      </label>
+      <input onchange="getDirectory(this)" type="file" class="file-input gap-2" webkitdirectory directory multiple />
+      <label class="input input-bordered flex items-center gap-2">
+        Directory
+        <input id="directory" name="directory" type="text" class="grow" disabled/>
+      </label>
+
+    </form>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn" onclick="run(this)">
+          Share Directory
+          @IconAddDirectory()
+        </button>
+      </form>
+    </div>
+  </div>
+
+  @directoryHandle.Once() {
+    <script type="text/javascript">
+      function getDirectory(e) {
+        var path = e.files[0].path
+        console.log(e.files[0])
+        console.log(e)
+        document.getElementById("directory").value = path
+      }
+
+      function run(e) {
+        var exec = require('child_process').exec, child;
+        child = exec('/home/dewz/pwd/htmx/test',
+          function (error, stdout, stderr) {
+            console.log('stdout:', stdout);
+            console.log('stderr:', stderr);
+            if (error !== null) {
+              console.log('exec error:', error);
+            }
+        });
+      }
+    </script>
+  }
+}

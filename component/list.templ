@@ -1,0 +1,33 @@
+package component
+
+templ ListLayout() {
+  <div class="overflow-x-auto">
+    <table class="table">
+      { children... }
+    </table>
+  </div>
+}
+
+type SessionProp struct {
+	Name string
+}
+
+templ Session(prop SessionProp) {
+  <tr class="flex items-center">
+    <td class="grow align-middle">{ prop.Name }</td>
+    <td>
+      <button class="btn">
+        Join
+        @IconJoin()
+      </button>
+    </td>
+  </tr>
+}
+
+templ ListSession(data []SessionProp) {
+  @ListLayout() {
+    for _, s := range data {
+      @Session(s)
+    }
+  }
+}

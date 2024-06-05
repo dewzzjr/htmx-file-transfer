@@ -1,0 +1,26 @@
+package component
+
+type AppProp struct {
+	Sessions []SessionProp
+	Create   ModalProp
+}
+
+templ App(prop AppProp) {
+	@Base() {
+		<main id="app" class="container mx-auto h-screen flex flex-col justify-center">
+			<div class="flex flex-row justify-between">
+				@ButtonModal(prop.Create, "") {
+					Create
+					@IconPlus()
+				}
+				<button class="btn">
+					Find Local
+					@IconSearch()
+				</button>
+			</div>
+			@ListSession(prop.Sessions)
+		</main>
+		@Modal(prop.Create)
+	}
+}
+
