@@ -18,7 +18,7 @@ Application to transfer file from one device to another device in the same local
 
 ## Technical requirement
 
-- ~~Embed golang binary to Web Application.~~ It is impossible so we need pivot to desktop application. Let's try [wails.io](https://wails.io/docs/gettingstarted/installation)
+- ~~Embed golang binary to Web Application.~~ It is impossible so we need pivot to desktop application. Let's try [wails.io](https://wails.io/docs/gettingstarted/installation). It's also has interesting [wails-htmx-tailwind](https://github.com/PylotLight/wails-htmx-templ-template)
 - Scan local network. [github.com/stefanwichmann/lanscan](https://pkg.go.dev/github.com/stefanwichmann/lanscan)
 - FTP Server. [github.com/jlaffaye/ftp](https://pkg.go.dev/github.com/jlaffaye/ftp)
 - P2P Network by Internet. [github.com/libp2p/go-libp2p](https://github.com/libp2p/go-libp2p)
